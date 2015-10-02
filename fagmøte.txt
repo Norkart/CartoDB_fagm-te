@@ -1,0 +1,59 @@
+Lit Historie om Valgkart i Webatlas
+
+-  Idee fra Arild og Alex og så tok vi kontakt med med SMP, de gå oss tilgang til deler av dataene fra NTB
+-  Alex snakket med NTB og vi fikk tilgang til dataene (stemme per valgkrets, kommune og fylke) på FTP direkte
+-  Opprettet kart på CartoDB norkarts konto til å viser dataene på riktige måte, simbology, farge, ettiketer, [infowindow, piechart i .js]
+-  Leste XML filene med FME (mer enn 3000 filer) fra NTBs FTP til FMEServer vår. Synkroniserte kylde i NTB med dataene hos FME server (hver 15 min) og skrifte det til CartoDB med FMEwriter til flere postgis tabeller. Arne og Sigbjørn jobbet som helter!
+-  Avisa likte ikke så godt valgkretser med sjøflate, så vi klippet alle valgkretser med kystlinje (dra Datavarehus)
+-  Synkroniserte dataene fra FME Server til CartoDB konto. Synk var ikke direkte fra NTB til CartoDB pga kart er ikke tilgjengelig gjennom synk prosess, det betyr kanskje tre minutter ned...og avisa vil ikke det
+-  Atle brukte sine siste tid på kontoret før ferien til å opprette ett html/javascript fil til å holde URLer til bakgrunskart og CartoDB hemlig, mulighet å styre layer via parameter i URLen
+		
+		http://www.webatlas.no/mediakart/static/valgkart-cartodb/v2/index.html?kart=<param>&lat=65&lon=13&zoom=5
+
+			<param> = [kommunevalg_krets, kommunevalg_kommune, fylkesvalg_krets, fylkesvalg_kommune, fylkesvalg_fylke]
+			<lat>,<lon>,<zoom> kan skifte hos lokalt avisa
+
+-  Vi fikk en 'klagge' fra avisa på at kart of infowindow vistes dårlig måte på mobil!!!
+-  Alex og liten Peter redigerte html/javascript (se bilde på Yammer :) til å viser det på mobiltelefon. (Versjon 2) Nye infowindow ble sidebar med piechart med hjelp av google charts
+		
+		Se hvordan ditt fylke stemte i fylkestingsvalget
+				http://www.adressa.no/nyheter/politikk/article11560670.ece
+		Sjekk hvordan dine naboer stemte
+				http://www.adressa.no/nyheter/politikk/article11560501.ece
+		Sjekk hvordan din kommune stemte i kommunevalget
+				http://www.adressa.no/nyheter/politikk/article11559799.ece
+		Sjekk resultatet for din valgkrets i hele Norge
+				http://www.adressa.no/nyheter/politikk/article11564594.ece
+		Nå er alle ordførerne på plass i Midt-Norge
+				http://www.adressa.no/nyheter/politikk/article11581011.ece
+
+-  Veldig Stolt av kompis, så flink, så imponert!
+
+
+På fagmøte vi forklarer hvordan kan vi:
+
+1-	åpen en konto hos cartodb
+2-	CartoDB dashboard
+3-	Opprette datasett inn i CartoDB (shp, zip, geojson)
+		geojson: postsone utn sjø oslo
+		geojson: omsetninger_30 siste dager
+4-	Analysere hvor mange omsetninger per postsone
+
+			SELECT p.cartodb_id, p.postnr, count(o.cartodb_id) AS total,avg(o.omsetningsbeloep) avg_belop,
+			avg(o.omsetningsbeloep)/st_area(st_transform(p.the_geom,32633)) beloptetthet,
+			p.the_geom,
+			p.the_geom_webmercator
+			FROM postsoner_uten_sjo_oslo p JOIN omsetninger_hele_landet_30dager o
+			ON st_contains(p.the_geom,o.the_geom) 
+			GROUP BY p.cartodb_id, p.postnr, p.the_geom,p.the_geom_webmercator
+
+5-	Synkronisere data inn i CartoDB med andre kylde
+6-	Opprette kart på CartoDB
+7-	Spørre datasett med SQL/filter
+8-	Styling kart
+9-	Publisere kart fra CartoDB (kopiere viz.json URL til begge to eksempel)
+10-	enkel eksempel i html
+11-	mindre enkel eksempel i html
+12-	"vanskelig" eksempel i html (fra Atle og Alex)
+13-	Viser map tutorials
+14-	Viser ett eksempel i Gallery
