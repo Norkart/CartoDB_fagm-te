@@ -1,0 +1,203 @@
+<html>
+<head>
+  <title>CartoDB oppgave: Layer selector</title>
+  <!-- includes cartodb.js library -->
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+  <!-- includes Leaflet.js library -->
+  <!-- <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script> -->
+  <!-- <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/> -->
+  <!-- includes norkart favicon -->
+  <link rel="shortcut icon" href="favicon.ico">
+  <style>
+    html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+ 
+      #layer_selector {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 0;
+      }
+ 
+      #layer_selector ul {
+        padding: 0; margin: 0; width: 150;
+        list-style-type: none;
+      }
+ 
+      #layer_selector li {
+        border-bottom: 1px solid #999;
+        padding: 7px 5px;
+        font-family: "Helvetica", Arial;
+        text-align:center;
+        font-size: 13px;
+        color: #444;
+        cursor: auto;
+      }
+ 
+      #layer_selector li:hover {
+        background-color: #F0F0F0;
+        font-weight: bold;
+        cursor: pointer;
+      }
+ 
+      #layer_selector li.selected {
+        background-color: #EEE;
+      }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <div id="layer_selector" class="cartodb-infobox">
+        <ul>
+          <li id="abc" class = "selected">Miljopartiet De Gronne</li>
+          <li id="efg">FRP</li>
+          <li id="hij">Arbeiderpartiet</li>
+          <li id="klm">Hoyre</li>
+          <li id="nop">Pensjonistpartiet</li>
+          <li id="qrs">Venstrepartiet</li>
+          <li id="tuv">Senterpartiet</li>
+          <li id="xyz">Rodt</li>
+        </ul>
+  </div>
+
+  <script>
+
+  
+  // create layer selector
+  var selectedLayer;
+
+  function createSelector(layers) {
+       // var sql = new cartodb.SQL({ user: 'norkart' });
+ 
+        var $options = $('#layer_selector li');
+        $options.click(function(e) {
+          // get the name of the selected layer
+          var $li = $(e.target);
+          var layer = $li.attr('id');
+
+          // deselect all and select the clicked one
+          $options.removeClass('selected');
+          $li.addClass('selected');
+
+          if(selectedLayer != layer ){
+          // definitely more elegant ways to do this, but it works...
+            if (layer == 'abc'){
+              layers.getSubLayer(0).show(); // MDG
+              layers.getSubLayer(1).hide(); // FRP
+              layers.getSubLayer(2).hide(); // A
+              layers.getSubLayer(3).hide(); // H
+              layers.getSubLayer(4).hide(); // P
+              layers.getSubLayer(5).hide(); // VP
+              layers.getSubLayer(6).hide(); // S
+              layers.getSubLayer(7).hide(); // R
+            }
+            else if (layer == 'efg') {
+              layers.getSubLayer(0).hide();
+              layers.getSubLayer(1).show();
+              layers.getSubLayer(2).hide();
+              layers.getSubLayer(3).hide();
+              layers.getSubLayer(4).hide();
+              layers.getSubLayer(5).hide();
+              layers.getSubLayer(6).hide();
+              layers.getSubLayer(7).hide();
+            }
+            else if (layer == 'hij') {
+              layers.getSubLayer(0).hide();
+              layers.getSubLayer(1).hide();
+              layers.getSubLayer(2).show();
+              layers.getSubLayer(3).hide();
+              layers.getSubLayer(4).hide();
+              layers.getSubLayer(5).hide();
+              layers.getSubLayer(6).hide();
+              layers.getSubLayer(7).hide();
+            }
+            else if (layer == 'klm') {
+              layers.getSubLayer(0).hide();
+              layers.getSubLayer(1).hide();
+              layers.getSubLayer(2).hide();
+              layers.getSubLayer(3).show();
+              layers.getSubLayer(4).hide();
+              layers.getSubLayer(5).hide();
+              layers.getSubLayer(6).hide();
+              layers.getSubLayer(7).hide();
+            }
+            else if (layer == 'nop') {
+              layers.getSubLayer(0).hide();
+              layers.getSubLayer(1).hide();
+              layers.getSubLayer(2).hide();
+              layers.getSubLayer(3).hide();
+              layers.getSubLayer(4).show();
+              layers.getSubLayer(5).hide();
+              layers.getSubLayer(6).hide();
+              layers.getSubLayer(7).hide();
+            }
+            else if (layer == 'qrs') {
+              layers.getSubLayer(0).hide();
+              layers.getSubLayer(1).hide();
+              layers.getSubLayer(2).hide();
+              layers.getSubLayer(3).hide();
+              layers.getSubLayer(4).hide();
+              layers.getSubLayer(5).show();
+              layers.getSubLayer(6).hide();
+              layers.getSubLayer(7).hide();
+            }
+            else if (layer == 'tuv') {
+              layers.getSubLayer(0).hide();
+              layers.getSubLayer(1).hide();
+              layers.getSubLayer(2).hide();
+              layers.getSubLayer(3).hide();
+              layers.getSubLayer(4).hide();
+              layers.getSubLayer(5).hide();
+              layers.getSubLayer(6).show();
+              layers.getSubLayer(7).hide();
+            }
+            else if (layer == 'xyz') {
+              layers.getSubLayer(0).hide();
+              layers.getSubLayer(1).hide();
+              layers.getSubLayer(2).hide();
+              layers.getSubLayer(3).hide();
+              layers.getSubLayer(4).hide();
+              layers.getSubLayer(5).hide();
+              layers.getSubLayer(6).hide();
+              layers.getSubLayer(7).show();
+            }
+          }
+        });
+      }
+      //var layerN = {};
+
+      function main() {
+        var map = L.map('map', { 
+          zoomControl: true,
+          center: [63.43, 10.39],
+          zoom: 11
+        });
+        // get the currently selected style
+        selectedStyle = $('li.selected').attr('id');
+ 
+        // Add basemap tiles
+        L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+             attribution: '&copy; <a href="http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        cartodb.createLayer (map,'https://norkart.cartodb.com/api/v2/viz/451f2f7a-5d17-11e5-b782-0e0c41326911/viz.json' , {legends : false})
+        .addTo(map)
+        .done(function(layers) {
+          createSelector(layers);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+ 
+      window.onload = main;
+  
+  </script>
+</body>
+</html>
