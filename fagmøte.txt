@@ -37,6 +37,7 @@ På fagmøte vi forklarer hvordan kan vi:
 3-	Opprette datasett inn i CartoDB (shp, zip, geojson)
 		geojson: postsone utn sjø oslo
 		geojson: omsetninger_30 siste dager
+
 4-	Analysere hvor mange omsetninger per postsone
 
 			SELECT p.cartodb_id, p.postnr, count(o.cartodb_id) AS total,avg(o.omsetningsbeloep) avg_belop,
@@ -52,8 +53,12 @@ På fagmøte vi forklarer hvordan kan vi:
 7-	Spørre datasett med SQL/filter
 8-	Styling kart
 9-	Publisere kart fra CartoDB (kopiere viz.json URL til begge to eksempel)
-10-	enkel eksempel i html
-11-	mindre enkel eksempel i html
-12-	"vanskelig" eksempel i html (fra Atle og Alex)
+10-	enkel eksempel i html. Trenger du URL som viz.json fra Publish hos CartoDB og limm det inn kode (se på fil med teks editor)
+11-	mindre enkel eksempel i html. (Det funker da du har bare omsetninger lag på kart hos CartoDB). Trenger du URL som viz.json fra Publish hos CartoDB og limm det inn kode (se på fil med teks editor)
+12-	"vanskelig" eksempel i html (fra Atle og Alex) (linker til Adressa og Sunmørsposten)
+	http://www.webatlas.no/mediakart/static/valgkart-cartodb/v2/index.html?kart=<param>&lat=65&lon=13&zoom=5
+
+			<param> = [kommunevalg_krets, kommunevalg_kommune, fylkesvalg_krets, fylkesvalg_kommune, fylkesvalg_fylke]
+			<lat>,<lon>,<zoom> kan skifte hos lokalt avisa
 13-	Viser map tutorials
 14-	Viser ett eksempel i Gallery
